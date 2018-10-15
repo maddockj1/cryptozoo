@@ -28,5 +28,8 @@ exports.seed = function(knex, Promise) {
           photo: 'https://veryfunnypics.eu/wp-content/uploads/2015/04/funny-pictures-sloth-in-class.jpg'
         },
       ])
+      .then(() => {
+        return knex.raw("SELECT setval('cryptids_id_seq', (SELECT MAX(id) FROM cryptids));")
+      })
     })
 }
