@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" charset="utf-8"></script>
+    <script src="/javascripts/myscript.js" charset="utf-8"></script>
+  </head>
+  <body>
+    Hi you are at the root of the site.
+    
+    <h1>List of Cryptids</h1>
+    <table id="list-cryptids">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Bio</th>
+          <th>Photo</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    
+    <h1>List of Reports/Sightings</h1>
+    <table id="list-reports">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Content</th>
+          <th>Reported At</th>
+          <th>Location</th>
+          <th>Cryptid Spotted</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    
+    <form id="create-report">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name"><br>
+      
+      <label for="content">Content</label>
+      <textarea rows="5" cols="25" name="content" id="content"></textarea><br>
+      
+      <label for="reported_at">Reported At</label>
+      <input type="datetime-local" name="reported_at" id="reported_at"><br>
+      
+      <label for="location">Location</label>
+      <input type="text" name="location" id="location"><br>
+      
+      <label for="cryptid_id">Cryptid</label>
+      <select class="" name="cryptid_id" id="cryptid_id">
+        <option>-</option>
+      </select>
+      <br>
+      
+      <input type="submit" value="Submit" id="submit-form">
+    </form>
+  </body>
+</html>

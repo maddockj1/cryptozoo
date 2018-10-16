@@ -1,8 +1,44 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid grey;
+  padding: 5px;
+}
+
+tbody img {
+  max-width: 200px;
+}
+
+th {
+  background-color: lightblue;
+}
+
+#list-cryptids {
+  display: none;
+}
+
+form {
+  margin: 20px;
+  background-color: lightgrey;
+  padding: 15px;
+  border: 1px solid grey;
+}
+
+.user-card {
+  background: #ffd6b3;
+  width: 200px;
+  padding: 15px;
+  margin: 15px 0px;
+  border: 1px solid grey;
+  border-radius: 10px;
 }

@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // Require route files
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var cryptidsRouter = require('./routes/cryptids');
 var reportsRouter = require('./routes/reports');
@@ -26,7 +25,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Setup/enable my routes
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cryptids', cryptidsRouter);
 app.use('/reports', reportsRouter);
