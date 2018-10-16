@@ -11,6 +11,7 @@ exports.seed = function(knex, Promise) {
         {id: 4, name: 'Craig', content: 'Craig recently said that the Classroom Sloth was stuck to his face with its magnetic hands.  Which leads us to believe that Craig may just be a programming robot from space and not be actually human.', reported_at: new Date(3018, 10, 13, 9, 22), location: 'Galvanize, Boulder, Colorado, United States, Earth', cryptid_id: 4},
       ])
       .then(() => {
+        // After SQL INSERT, update the autoincrementing id counter
         return knex.raw("SELECT setval('reports_id_seq', (SELECT MAX(id) FROM reports));")
       })
     })

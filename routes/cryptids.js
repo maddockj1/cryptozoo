@@ -2,45 +2,12 @@ var express = require('express');
 var router = express.Router();
 const knex = require('../knex')
 
-// READ ALL records for this table
-router.get('/', (req, res, next) => {
-  knex('cryptids')
-  .then( (records) => {
-    res.send(records)
-  })
-  .catch((err) => {
-    next(err)
-  })
-  
-})
-
-// READ ONE record for this table
-router.get('/:id', (req, res, next) => {
-  
-  // validate id is a number, escape any special chars that would indicate SQL injection.
-  // do this later
-  
-  knex('cryptids')
-  .where('id', req.params.id)
-  .then( (records) => {
-    res.send(records)
-  })
-  .catch((err) => {
-    next(err)
-  })
-  
-})
-
-// CREATE ONE record for this table
+// CREATE ONE
 router.post('/', (req, res, next) => {
-  //create new cryptid
-  // we'll need some POST body data in order to create a new cryptid
-  // req.body
-  
-  // // want to do some validation
+  // we'll need some POST body data in order to create a new cryptid (req.body)
+  // If we wanted to do some validation, it would go like:
   // let err = new Error('validation failed')
-  // if( theresAProblem ) next(err)
-  
+  // if( !req.body.name ) { next(err) }
   let newRecord = {
     name: req.body.name,
     bio: req.body.bio,
@@ -55,79 +22,93 @@ router.post('/', (req, res, next) => {
   })
   .catch((err) => {
     next(err)
-  })
-  
+  })  
 })
 
-// UPDATE ONE record for this table
+// READ ALL
+router.get('/', (req, res, next) => {
+  knex('cryptids')
+  .then( (records) => {
+    res.send(records)
+  })
+  .catch((err) => {
+    next(err)
+  })
+})
+
+// READ ONE
+router.get('/:id', (req, res, next) => {
+  // validate id is a number, escape any special chars that would indicate SQL injection. Do this later.
+  knex('cryptids')
+  .where('id', req.params.id)
+  .then( (records) => {
+    res.send(records)
+  })
+  .catch((err) => {
+    next(err)
+  })  
+})
+
+// UPDATE ONE
 router.patch('/:id', (req, res, next) => {
-  
-  // Using the given id, look up if that record actually exists
-  // req.params.id
-  
+  // FIRST KNEX CALL: Using the given id (req.params.id), look up if that record actually exists
   knex('cryptids')
   .where('id', req.params.id)
   .then((results) => {
-    console.log('record', results);
-    // If found, go ahead and update it
+    // If found, go ahead and update that record
     if(results.length>0) {
-      // all good, it was found-- update it
-      let updatedRecord = results[0]
+      // It was found-- update it. Check to see what new data was provided via req.body
+      let myRecord = results[0]
+      if( req.body.name ) { myRecord.name = req.body.name }
+      if( req.body.bio ) { myRecord.bio = req.body.bio }
+      if( req.body.photo ) { myRecord.photo = req.body.photo }
       
-      if( req.body.name ) { updatedRecord.name = req.body.name }
-      if( req.body.bio ) { updatedRecord.bio = req.body.bio }
-      if( req.body.photo ) { updatedRecord.photo = req.body.photo }
-      
-      // UPDATE the record in the DB
+      // SECOND KNEX CALL: Update the record in the DB
       knex('cryptids')
-      .update(updatedRecord)
+      .update(myRecord)
       .where('id', req.params.id)
       .returning('*')
-      .then((resUpdate) => {
-      
+      .then((updatedRecord) => {
         // Send back the newly updated record object
-        res.send(resUpdate)
+        res.send(updatedRecord)
       })
       
     } else {
+      // Couldn't find a record whose id = req.params.id
       throw new Error('YA DINGUS. NOT FOUND.')
     }
   })
   .catch((err) => {
     next(err)
   })
-  
-
 })
 
 // DELETE ONE record for this table
 router.delete('/:id', (req, res, next) => {
-    // lookup or verify that the record specified by the given id, actually exists
-    // req.params.id
+    // FIRST KNEX CALL: Using the given id (req.params.id), look up if that record actually exists
     knex('cryptids')
     .where('id', req.params.id)
-    .then((theRecords) => {
-      console.log('theRecord', theRecords);
+    .then((foundRecords) => {
       // if it exists, delete it
-      if( theRecords.length>0 ) {
-        // delete it
-        knex('cryptids')
-        .del()
+      if( foundRecords.length>0 ) {
+        
+        // SECOND KNEX CALL: Delete the record from the DB
+        knex('cryptids').del()
         .where('id', req.params.id)
         .returning('*')
-        .then((result) => {
-          res.send(result[0])
+        .then((results) => {
+          let deletedRecord = results[0]
+          res.send(deletedRecord)
         })
         
       } else {
+        // Couldn't find what I'm trying to delete
         throw new Error(`Can't delete what does not exist`)
       }
     })
     .catch((err) => {
       next(err)
     })
-    
-  
 })
 
 module.exports = router

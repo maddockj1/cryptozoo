@@ -29,6 +29,7 @@ exports.seed = function(knex, Promise) {
         },
       ])
       .then(() => {
+        // After SQL INSERT, update the autoincrementing id counter
         return knex.raw("SELECT setval('cryptids_id_seq', (SELECT MAX(id) FROM cryptids));")
       })
     })
